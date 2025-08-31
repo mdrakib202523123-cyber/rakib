@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background: #2575fc;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <h2>Admin Panel - Users</h2>
+  <table id="usersTable">
+    <tr>
+      <th>Email</th>
+      <th>Username</th>
+    </tr>
+  </table>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs } 
+      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // Firebase config (same as signup page)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCVffNpVkZdXeoHUHRl3abjhE-hmnoJWno",
+      authDomain: "myapp-rakib.firebaseapp.com",
+      projectId: "myapp-rakib",
+      storageBucket: "myapp-rakib.firebasestorage.app",
+      messagingSenderId: "536334366917",
+      appId: "1:536334366917:web:d937225696e1c06b3e18ac"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Fetch all users from Firestore
+    async function loadUsers() {
+      const querySnapshot = await getDocs(collection(db, "users"));
+      const table = document.getElementById("usersTable");
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        let row = `<tr>
+          <td>${data.email}</td>
+          <td>${data.username}</td>
+        </tr>`;
+        table.innerHTML += row;
+      });
+    }
+
+    loadUsers();
+  </script>
+</body>
+</html>
